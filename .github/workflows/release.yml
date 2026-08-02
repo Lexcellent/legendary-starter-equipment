@@ -1,0 +1,72 @@
+name: Release Factorio mod
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag, for example v1.2.0"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate release version
+        id: release
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            tag="${{ inputs.tag }}"
+          else
+            tag="${GITHUB_REF_NAME}"
+          fi
+
+          if [[ ! "${tag}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Release tag must use the vMAJOR.MINOR.PATCH format."
+            exit 1
+          fi
+
+          version="${tag#v}"
+          manifest_version="$(jq -r '.version' info.json)"
+
+          if [[ "${version}" != "${manifest_version}" ]]; then
+            echo "Tag ${tag} does not match info.json version ${manifest_version}."
+            exit 1
+          fi
+
+          archive="legendary-starter-equipment_${version}.zip"
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+          echo "archive=${archive}" >> "${GITHUB_OUTPUT}"
+
+      - name: Build Factorio mod archive
+        shell: bash
+        run: |
+          package_dir="legendary-starter-equipment_${{ steps.release.outputs.version }}"
+          mkdir -p "build/${package_dir}"
+          cp control.lua settings.lua info.json changelog.txt LICENSE README.md "build/${package_dir}/"
+          cp -R locale "build/${package_dir}/locale"
+          cd build
+          zip -r "../${{ steps.release.outputs.archive }}" "${package_dir}"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "${{ steps.release.outputs.tag }}" \
+            "${{ steps.release.outputs.archive }}" \
+            --title "${{ steps.release.outputs.tag }}" \
+            --generate-notes \
+            --target "${GITHUB_SHA}"

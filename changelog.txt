@@ -1,0 +1,42 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2026-08-03
+  Changes:
+    - Moved worker robot research options to per-player runtime settings.
+    - Replaced numeric text fields with validated drop-down selectors.
+    - Applied research-level changes immediately without restarting the game.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2026-08-03
+  Bugfixes:
+    - Delayed starter item delivery until the introductory cutscene has ended and the player's main
+      inventory is available.
+    - Added a persistent delivery queue so item grants are retried instead of being lost.
+    - Queued existing players without a recorded grant when upgrading from an earlier version.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026-08-03
+  Features:
+    - Added a startup setting for worker robot cargo size research levels 0 through 3.
+    - Added a startup setting for worker robot speed research levels 0 through 6.
+    - Applied configured research levels to all existing and newly created forces.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2026-08-03
+  Bugfixes:
+    - Inserted starter items directly into the player's main inventory instead of spilling them.
+  Changes:
+    - Added legendary mech armor.
+    - Replaced energy shield equipment with energy shield equipment MK2.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-08-03
+  Features:
+    - Added a fixed starter kit for every newly created player.
+    - Added 300 normal-quality construction robots.
+    - Added the requested legendary-quality Space Age equipment.
+    - Added English and Simplified Chinese localization.

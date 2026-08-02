@@ -1,0 +1,13 @@
+{
+  "name": "legendary-starter-equipment",
+  "version": "1.2.0",
+  "title": "Legendary Starter Equipment",
+  "author": "Lexcellent",
+  "description": "Gives every newly created player a fixed starter kit containing construction robots and legendary Space Age equipment.",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.0",
+    "quality >= 2.1.0",
+    "space-age >= 2.1.0"
+  ]
+}
